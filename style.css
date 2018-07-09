@@ -1,0 +1,45 @@
+:root {
+  --document-background: #723d46;
+  --drum-pad-border: #c9cba3;
+  --drum-pad-text: #ffe1a8;
+}
+
+body {
+  background-color: var(--document-background);
+}
+
+#drum-machine {
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#display {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 20px;
+  width: 30%;
+}
+
+.drum-pad {
+  height: 80px;
+  margin: 0 auto;
+  width: 80px;
+}
+
+input {
+  background-color: transparent;
+  border: 3px solid var(--drum-pad-border);
+  box-sizing: border-box;
+  color: var(--drum-pad-text);
+  cursor: pointer;
+  font-size: 20px;
+  height: 100%;
+  padding: 10px;
+  width: 100%;
+}
+
+.clicked {
+  background-color: var(--drum-pad-border);
+}
