@@ -1,5 +1,8 @@
-// Sound source: https://github.com/jonobr1/Neuronal-Synchrony
+// On dev: change script src in the html file to index.js
+// `npm run build` will spit out dist.js
+// Remember to change the script src back
 
+// Sound source: https://github.com/jonobr1/Neuronal-Synchrony
 class DrumMachine {
   constructor() {
     // convert HTMLCollection to an array
