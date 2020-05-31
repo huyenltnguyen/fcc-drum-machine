@@ -1,0 +1,15 @@
+#display {
+  height: 30px;
+  width: 100%;
+  text-align: center;
+  font-size: 40px;
+  color: #222;
+}
+
+.drum-pads {
+  display: flex;
+  width: calc(80px * 4 + 10px * 4);
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  margin-top: 80px;
+}

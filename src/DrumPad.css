@@ -1,0 +1,23 @@
+:root {
+  --drum-pad-border: #c9cba3;
+  --drum-pad-text: #ffe1a8;
+  --drum-pad-text-selected: #444;
+}
+
+.drum-pad {
+  height: 80px;
+  width: 80px;
+  display: inline-flex;
+  border: 2px solid var(--drum-pad-border);
+  color: var(--drum-pad-text);
+  cursor: pointer;
+  font-size: 20px;
+  margin: 10px;
+  align-items: center;
+  justify-content: center;
+}
+
+.selected {
+  background-color: var(--drum-pad-border);
+  color: var(--drum-pad-text-selected);
+}
