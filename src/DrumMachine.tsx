@@ -6,44 +6,50 @@ import { hotKeys, drumPads } from "./constants";
 import "./DrumMachine.css";
 
 const DrumMachine = () => {
-  const divRef = useRef();
-  const audioRefs = useRef([]);
-  const [selectedPad, setSelectedPad] = useState(null);
+  const divRef = useRef<HTMLDivElement>(null);
+  const audioRefs = useRef<(HTMLAudioElement | null)[]>([]);
+  const [selectedPad, setSelectedPad] = useState<string | null>(null);
 
-  const setAudioRef = (ref) => {
-    !audioRefs.current.includes(ref) && audioRefs.current.push(ref);
+  const setPad = (padId: string) => setSelectedPad(padId);
+
+  const unsetPad = () => setTimeout(() => setSelectedPad(null), 200);
+
+  const playSound = (padId: string) => {
+    // Use the padId to find the index of the ref in the ref array
+    const refIndex = drumPads.findIndex((item) => item.id === padId);
+
+    // Play the corresponding audio
+    audioRefs.current[refIndex] && audioRefs.current[refIndex].play();
   };
 
-  const playSound = (padId) => {
-    const audioRef = audioRefs.current.find((item) => item.id === padId);
-    audioRef.play();
-  };
-
-  const onPadClick = (padId) => {
-    setSelectedPad(padId);
+  const onMouseDown = (padId: string) => {
+    setPad(padId);
     playSound(padId);
   };
 
-  const onKeyDown = (event) => {
+  const onMouseUp = unsetPad;
+
+  const onKeyDown = (event: React.KeyboardEvent) => {
     const key = event.key.toUpperCase();
 
     if (!Object.values(hotKeys).includes(key)) return;
 
-    setSelectedPad(key);
+    setPad(key);
     playSound(key);
   };
 
-  const onKeyUp = () => setSelectedPad(null);
+  const onKeyUp = unsetPad;
 
   const renderDrumPads = () =>
-    drumPads.map((item) => (
+    drumPads.map((item, index) => (
       <DrumPad
         key={item.id}
         id={item.id}
         audio={item.audio}
-        ref={setAudioRef}
         className={selectedPad === item.id ? "selected" : ""}
-        onClick={onPadClick}
+        onMouseDown={onMouseDown}
+        onMouseUp={onMouseUp}
+        ref={(el) => (audioRefs.current[index] = el)}
       />
     ));
 
