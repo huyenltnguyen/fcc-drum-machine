@@ -1,60 +1,16 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
+
 import DrumPad from "./DrumPad";
+import { hotKeys, drumPads } from "./constants";
+
 import "./DrumMachine.css";
 
-const drumPads = [
-  {
-    id: "Q",
-    audio:
-      "https://raw.githubusercontent.com/jonobr1/Neuronal-Synchrony/master/assets/B/bubbles.mp3",
-  },
-  {
-    id: "W",
-    audio:
-      "https://raw.githubusercontent.com/jonobr1/Neuronal-Synchrony/master/assets/B/confetti.mp3",
-  },
-  {
-    id: "E",
-    audio:
-      "https://raw.githubusercontent.com/jonobr1/Neuronal-Synchrony/master/assets/B/dotted-spiral.mp3",
-  },
-  {
-    id: "A",
-    audio:
-      "https://raw.githubusercontent.com/jonobr1/Neuronal-Synchrony/master/assets/B/flash-2.mp3",
-  },
-  {
-    id: "S",
-    audio:
-      "https://raw.githubusercontent.com/jonobr1/Neuronal-Synchrony/master/assets/B/glimmer.mp3",
-  },
-  {
-    id: "D",
-    audio:
-      "https://raw.githubusercontent.com/jonobr1/Neuronal-Synchrony/master/assets/B/piston-1.mp3",
-  },
-  {
-    id: "Z",
-    audio:
-      "https://raw.githubusercontent.com/jonobr1/Neuronal-Synchrony/master/assets/B/prism-1.mp3",
-  },
-  {
-    id: "X",
-    audio:
-      "https://raw.githubusercontent.com/jonobr1/Neuronal-Synchrony/master/assets/B/timer.mp3",
-  },
-  {
-    id: "C",
-    audio:
-      "https://raw.githubusercontent.com/jonobr1/Neuronal-Synchrony/master/assets/B/wipe.mp3",
-  },
-];
-
 const DrumMachine = () => {
+  const divRef = useRef();
   const audioRefs = useRef([]);
-  const [selectedPad, setSelectedPad] = useState();
+  const [selectedPad, setSelectedPad] = useState(null);
 
-  const setRef = (ref) => {
+  const setAudioRef = (ref) => {
     !audioRefs.current.includes(ref) && audioRefs.current.push(ref);
   };
 
@@ -70,9 +26,14 @@ const DrumMachine = () => {
 
   const onKeyDown = (event) => {
     const key = event.key.toUpperCase();
+
+    if (!Object.values(hotKeys).includes(key)) return;
+
     setSelectedPad(key);
     playSound(key);
   };
+
+  const onKeyUp = () => setSelectedPad(null);
 
   const renderDrumPads = () =>
     drumPads.map((item) => (
@@ -80,14 +41,25 @@ const DrumMachine = () => {
         key={item.id}
         id={item.id}
         audio={item.audio}
-        ref={setRef}
+        ref={setAudioRef}
         className={selectedPad === item.id ? "selected" : ""}
         onClick={onPadClick}
       />
     ));
 
+  // Autofocus on the wrapper div on component mount
+  useEffect(() => {
+    divRef.current && divRef.current.focus();
+  }, []);
+
   return (
-    <div id="drum-machine" onKeyDown={onKeyDown} tabIndex={0}>
+    <div
+      id="drum-machine"
+      tabIndex={0}
+      ref={divRef}
+      onKeyDown={onKeyDown}
+      onKeyUp={onKeyUp}
+    >
       <div id="display">{selectedPad}</div>
       <div className="drum-pads">{renderDrumPads()}</div>
     </div>
